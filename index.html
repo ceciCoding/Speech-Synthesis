@@ -35,6 +35,29 @@
   const options = document.querySelectorAll('[type="range"], [name="text"]');
   const speakButton = document.querySelector('#speak');
   const stopButton = document.querySelector('#stop');
+
+  //there's a global variable called speechSynthesis to which we can say .speak and pass it the msg
+  //we can add an eventListener to it 
+  function populateVoices() {
+    voices = this.getVoices();
+    const voiceOptions = voices
+      .map(voice => `<option value = "${voice.name}">${voice.name} (${voice.lang})</option>`)
+      .join("");
+      voicesDropdown.innerHTML = voiceOptions;
+  }
+
+  function setVoice() {
+    msg.voice = voices.find(voice => voice.name === this.value);
+    toggle();
+  } 
+
+  function toggle() {
+    speechSynthesis.cancel();
+    speechSynthesis.speak(msg);
+  }
+
+  speechSynthesis.addEventListener('voiceschanged', populateVoices);
+  voicesDropdown.addEventListener('change', setVoice);
 </script>
 
 </body>
